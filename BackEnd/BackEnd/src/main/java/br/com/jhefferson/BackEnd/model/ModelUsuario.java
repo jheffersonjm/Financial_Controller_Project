@@ -1,46 +1,28 @@
-package br.com.jhefferson.backend.model;
+package br.com.jhefferson.BackEnd.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 
 @Entity
  @Table(name= "Usuario")
 public class ModelUsuario {
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+@Column(name = "id_usuario")
+private Long idUsuario;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Column(name = "nome", nullable = false, length = 100)
-    private String nome;
-    private String senha; 
-    private String email;
+@Column(name = "nome_usuario", nullable = false, length = 100)
+private String nomeUsuario;
 
-    public int getId() {
-        return id;
-    }
+@Column(name = "email_usuario", nullable = false, length = 100, unique = true)
+private String emailUsuario;
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
+@Column(name = "senha_usuario", nullable = false, length = 255)
+private String senhaUsuario;
 
 }
