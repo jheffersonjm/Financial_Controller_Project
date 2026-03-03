@@ -35,7 +35,7 @@ Projeto: BackEnd (Financial_Controller_Project)
 - Método `criarConta(...)`:
   - Cria `ModelConta` válido.
   - Usa `setNomeConta(...)`.
-  - Inicializa `saldoConta` com `0.0`.
+  - Inicializa `saldoConta` com `BigDecimal.ZERO`.
   - Persiste com `repositoryConta.save(...)`.
 - Método `atualizarConta(...)`:
   - Busca por ID com `findById(...)`.
@@ -179,7 +179,6 @@ Projeto: BackEnd (Financial_Controller_Project)
 ### Arquivos alterados (links)
 
 - [pom.xml](pom.xml)
-- [src/main/resources/application.yaml](src/main/resources/application.yaml)
 
 ### Resultado da validação
 
@@ -240,3 +239,20 @@ Projeto: BackEnd (Financial_Controller_Project)
 
 - Verificação de compilação executada após ajuste.
 - Resultado: **No errors found**.
+
+## 11) Status atual da documentação
+
+### Situação consolidada
+
+- Código-fonte validado sem erros de compilação nas últimas verificações (`No errors found`).
+- Correções de JPA/Hibernate e endpoint de usuário documentadas e aplicadas.
+- Swagger/OpenAPI documentado com dependência adicionada em [pom.xml](pom.xml).
+
+### Pendência de ambiente
+
+- O runtime Maven local ainda precisa usar Java 17+ para executar Spring Boot 4 sem erro de versão.
+- Erro de ambiente registrado: `class file has wrong version 61.0, should be 52.0`.
+
+### Próximo passo recomendado
+
+- Configurar `JAVA_HOME`/`Path` para JDK compatível e executar novamente `./mvnw.cmd spring-boot:run`.

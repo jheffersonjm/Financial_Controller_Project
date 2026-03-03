@@ -1,190 +1,176 @@
-# Financial Controller - Backend
+# Documentação Técnica - Financial Controller (BackEnd)
 
-## 📋 Descrição do Projeto
+## 1. Visão geral
 
-O **Financial Controller** é uma aplicação backend desenvolvida em Java utilizando Spring Boot, destinada a criar um sistema de controle financeiro. O projeto está em fase inicial de desenvolvimento e atualmente conta com a estrutura básica de uma aplicação web com persistência de dados.
+Este projeto é uma API backend em Spring Boot para gerenciamento de usuários, contas e transações financeiras.
 
-## 🚀 Tecnologias Utilizadas
+Status atual:
+- Camada de persistência (JPA) implementada para `ModelUsuario`, `ModelConta` e `ModelTransacao`.
+- Serviços implementados para usuários, contas e transações.
+- Endpoint REST implementado para usuários.
+- Swagger/OpenAPI disponível via Springdoc.
 
-- **Java 25** - Linguagem de programação principal
-- **Spring Boot 4.0.3** - Framework para desenvolvimento de aplicações Java
-- **Spring Data JPA** - Para persistência e acesso a dados
-- **Spring Web MVC** - Para desenvolvimento de APIs REST
-- **H2 Database** - Banco de dados em memória para desenvolvimento e testes
-- **PostgreSQL** - Banco de dados relacional para produção
-- **Lombok** - Biblioteca para reduzir código boilerplate
-- **Maven** - Gerenciamento de dependências e build
-- **Tomcat** - Servidor de aplicação embarcado
+## 2. Stack técnica
 
-## 📁 Estrutura do Projeto
+- Java (projeto configurado com `java.version` 25)
+- Spring Boot `4.0.3`
+- Spring Data JPA
+- Spring Web MVC
+- H2 (runtime)
+- PostgreSQL (runtime)
+- Springdoc OpenAPI UI `2.8.6`
+- Maven Wrapper
 
-```
-backend/
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── br/com/jhefferson/backend/
-│   │   │       ├── BackendApplication.java          # Classe principal da aplicação
-│   │   │       ├── ServletInitializer.java          # Configuração para deploy WAR
-│   │   │       └── model/
-│   │   │           └── ModelUsuario.java            # Entidade Usuario
-│   │   └── resources/
-│   │       ├── application.yaml                     # Configurações da aplicação
-│   │       ├── static/                             # Arquivos estáticos
-│   │       └── templates/                          # Templates (se aplicável)
-│   └── test/
-│       └── java/
-│           └── br/com/jhefferson/backend/
-│               └── BackendApplicationTests.java     # Testes da aplicação
-├── target/                                         # Arquivos compilados
-├── pom.xml                                        # Configurações Maven
-├── mvnw                                          # Maven Wrapper (Linux/Mac)
-├── mvnw.cmd                                      # Maven Wrapper (Windows)
-└── HELP.md                                       # Documentação de ajuda
-```
+## 3. Estrutura de pacotes
 
-## 🗃️ Modelo de Dados
+- `br.com.jhefferson.BackEnd.Controller` → endpoints REST
+- `br.com.jhefferson.BackEnd.Service` → regras de negócio
+- `br.com.jhefferson.BackEnd.Repository` → acesso a dados
+- `br.com.jhefferson.BackEnd.model` → entidades JPA
 
-### Entidade Usuario
+## 4. Modelo de domínio
 
-A aplicação atualmente possui uma entidade `ModelUsuario` que representa os usuários do sistema:
+### 4.1 Usuário (`ModelUsuario`)
+Tabela: `Usuario`
 
-**Tabela: Usuario**
+Campos:
+- `idUsuario` (`Long`) - PK, auto increment
+- `nomeUsuario` (`String`, 100)
+- `emailUsuario` (`String`, 100, único)
+- `senhaUsuario` (`String`, 255)
 
-| Campo | Tipo | Descrição | Constraints |
-|-------|------|-----------|-------------|
-| id | Integer | Identificador único | Primary Key, Auto Increment |
-| nome | String | Nome do usuário | Not Null, Max 100 caracteres |
-| senha | String | Senha do usuário | - |
-| email | String | E-mail do usuário | - |
+### 4.2 Conta (`ModelConta`)
+Tabela: `Conta`
 
-```java
-@Entity
-@Table(name = "Usuario")
-public class ModelUsuario {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    
-    @Column(name = "nome", nullable = false, length = 100)
-    private String nome;
-    
-    private String senha;
-    private String email;
-    
-    // Getters e Setters
+Campos:
+- `idConta` (`Long`) - PK, auto increment
+- `nomeConta` (`String`, 100)
+- `idUsuarios` (`ModelUsuario`) - FK `id_usuario`
+- `saldoConta` (`BigDecimal`, precision 10, scale 2)
+
+### 4.3 Transação (`ModelTransacao`)
+Tabela: `Transacao`
+
+Campos:
+- `idTransacao` (`Long`) - PK, auto increment
+- `descricaoTransacao` (`String`, coluna `valor_transacao`)
+- `dataTransacao` (`LocalTime`)
+- `idConta` (`ModelConta`) - FK `id_conta`
+
+## 5. API atual
+
+Base URL local: `http://localhost:8080`
+
+### 5.1 Usuários
+
+Controller: `ControllerUsuarios`
+
+#### GET `/usuarios/BuscarUsuarios`
+Parâmetros de query:
+- `nomeUsuario`
+- `emailUsuario`
+
+Retorno atual:
+- `String` com a senha do usuário quando nome+email conferem
+- `null` quando não encontra
+
+> Observação: este comportamento expõe senha em texto puro e não é recomendado para produção.
+
+#### POST `/usuarios/salvarUsuario`
+Body JSON:
+
+```json
+{
+  "nomeUsuario": "João",
+  "emailUsuario": "joao@email.com",
+  "senhaUsuario": "123456"
 }
 ```
 
-## ⚙️ Configuração e Instalação
+Retorno:
+- `ModelUsuario` salvo
 
-### Pré-requisitos
+## 6. Serviços implementados
 
-- Java 25 ou superior
-- Maven 3.6+ (ou usar o Maven Wrapper incluído)
-- IDE de sua preferência (IntelliJ IDEA, Eclipse, VS Code)
+### 6.1 `ServiceUsuarios`
+Funções principais:
+- `criarUsuario(...)`
+- `atualizarUsuario(...)`
+- `deletarUsuario(...)`
+- `obterUsuarioPorId(...)`
+- `obterUsuario(emailUsuario)`
+- `PegarSenha(nomeUsuario, emailUsuario)`
 
-### Instalação
+### 6.2 `ServiceContas`
+Funções principais:
+- `criarConta(...)`
+- `atualizarConta(...)`
+- `deletarConta(...)`
+- `obterContaPorId(...)`
 
-1. **Clone o repositório:**
-   ```bash
-   git clone [URL_DO_REPOSITORIO]
-   cd Financial_Controller_Project/backend/backend
-   ```
+### 6.3 `ServiceTransacao`
+Funções principais:
+- `criarTransacao(...)`
+- `atualizarTransacao(...)`
+- `deletarTransacao(...)`
+- `obterTransacaoPorId(...)`
 
-2. **Compile o projeto:**
-   ```bash
-   ./mvnw clean compile
-   ```
+## 7. Executar localmente
 
-3. **Execute os testes:**
-   ```bash
-   ./mvnw test
-   ```
+### 7.1 Pré-requisitos
+- JDK 17+ (Spring Boot 4 exige Java 17 ou superior)
+- Maven Wrapper
 
-4. **Execute a aplicação:**
-   ```bash
-   ./mvnw spring-boot:run
-   ```
+### 7.2 Comandos
 
-### Configuração do Banco de Dados
-
-A aplicação está configurada para usar:
-
-- **H2 Database** para desenvolvimento (banco em memória)
-- **PostgreSQL** para produção
-
-As configurações podem ser ajustadas no arquivo [`application.yaml`](src/main/resources/application.yaml).
-
-## 🚀 Executando a Aplicação
-
-### Modo de Desenvolvimento
+Windows:
 
 ```bash
+.\mvnw.cmd clean compile
+.\mvnw.cmd spring-boot:run
+```
+
+Linux/macOS:
+
+```bash
+./mvnw clean compile
 ./mvnw spring-boot:run
 ```
 
-A aplicação será iniciada em: `http://localhost:8080`
+## 8. Swagger / OpenAPI
 
-### Build para Produção
+- UI: `http://localhost:8080/swagger-ui/index.html`
+- OpenAPI JSON: `http://localhost:8080/v3/api-docs`
 
-```bash
-./mvnw clean package
-```
+## 9. Problemas conhecidos e solução
 
-O arquivo WAR será gerado em: `target/backend-0.0.1-SNAPSHOT.war`
+### 9.1 Erro de versão Java
+Erro comum:
+- `class file has wrong version 61.0, should be 52.0`
 
-## 🔧 Desenvolvimento
+Causa:
+- Maven executando com Java 8.
 
-### Próximos Passos Sugeridos
+Correção:
+- Configurar `JAVA_HOME` para JDK 17+ e reiniciar o terminal.
 
-1. **Controllers** - Criar controladores REST para gerenciar usuários
-2. **Repositories** - Implementar interfaces de repositório para acesso aos dados
-3. **Services** - Criar camada de serviços para lógica de negócio
-4. **Security** - Implementar autenticação e autorização
-5. **Validação** - Adicionar validações aos modelos
-6. **Documentação da API** - Integrar Swagger/OpenAPI
-7. **Testes** - Expandir cobertura de testes unitários e de integração
+### 9.2 Erro Hibernate de `scale`
+Erro já tratado no projeto:
+- `scale has no meaning for SQL floating point types`
 
-### Estrutura Recomendada para Expansão
+Correção aplicada:
+- Campo monetário em `ModelConta` alterado para `BigDecimal`.
 
-```
-src/main/java/br/com/jhefferson/backend/
-├── controller/          # Controladores REST
-├── service/            # Lógica de negócio
-├── repository/         # Interfaces de acesso a dados
-├── model/             # Entidades JPA
-├── dto/               # Data Transfer Objects
-├── config/            # Configurações
-├── exception/         # Tratamento de exceções
-└── util/              # Utilitários
-```
+## 10. Melhorias recomendadas
 
-## 📝 Convenções de Código
+- Não retornar senha no endpoint de busca.
+- Criar DTOs para entrada/saída de API.
+- Adicionar validações (`@Valid`, `@NotBlank`, `@Email`).
+- Criar controllers para contas e transações.
+- Padronizar nomes de endpoints para convenção REST (`/usuarios`, `/contas`, `/transacoes`).
+- Adicionar autenticação/autorização.
 
-- Utilizar **camelCase** para variáveis e métodos
-- Utilizar **PascalCase** para classes
-- Prefixar entidades com "Model" (ex: `ModelUsuario`)
-- Seguir padrões REST para APIs
-- Documentar métodos públicos
-- Manter cobertura de testes acima de 80%
+## 11. Referências internas
 
-## 🤝 Contribuição
-
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/nova-funcionalidade`)
-3. Commit suas mudanças (`git commit -am 'Adiciona nova funcionalidade'`)
-4. Push para a branch (`git push origin feature/nova-funcionalidade`)
-5. Crie um Pull Request
-
-## 📄 Licença
-
-Este projeto está sob a licença [especificar licença].
-
-## 👤 Autor
-
-**Jhefferson** - Desenvolvedor Principal
-
----
-
-**Nota:** Este projeto está em desenvolvimento inicial. A documentação será atualizada conforme novas funcionalidades forem implementadas.
+- Histórico detalhado de correções: `RELATORIO_ERROS.md`
+- Arquivo de build e dependências: `pom.xml`
