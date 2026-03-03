@@ -10,4 +10,5 @@ public interface InterfaceUsuarios {
     ModelUsuario atualizarUsuario(Long idUsuario, String nomeUsuario, String emailUsuario, String senhaUsuario);
     void deletarUsuario(Long idUsuario);
     ModelUsuario obterUsuarioPorId(Long idUsuario); 
+    ModelUsuario obterUsuario(String emailUsuario);
 }

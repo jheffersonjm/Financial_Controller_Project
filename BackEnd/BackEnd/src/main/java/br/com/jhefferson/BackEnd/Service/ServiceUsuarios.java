@@ -9,7 +9,7 @@ import br.com.jhefferson.BackEnd.model.ModelUsuario;
 
 @Service
 public class ServiceUsuarios implements InterfaceUsuarios{
-   
+
     private final RepositoryUsuario repositoryUsuario;
 
     public ServiceUsuarios(RepositoryUsuario repositoryUsuario) {
@@ -18,11 +18,16 @@ public class ServiceUsuarios implements InterfaceUsuarios{
 
     @Override
     public ModelUsuario criarUsuario(String nomeUsuario, String emailUsuario, String senhaUsuario) {
+
+        String nome = nomeUsuario;
+        String email = emailUsuario;
+        String senha = PegarSenha(senhaUsuario);
+
         try {
            ModelUsuario usuario = new ModelUsuario();
-        usuario.setNomeUsuario(nomeUsuario);
-        usuario.setEmailUsuario(emailUsuario);
-        usuario.setSenhaUsuario(senhaUsuario);
+        usuario.setNomeUsuario(nome);
+        usuario.setEmailUsuario(email);
+        usuario.setSenhaUsuario(senha);
         
        return repositoryUsuario.save(usuario);
         } catch (Exception e) {
@@ -81,6 +86,35 @@ public class ServiceUsuarios implements InterfaceUsuarios{
             return null;
         }
     }
+
+    public String PegarSenha(String senhaUsuario){ 
+
+        return senhaUsuario;
+    }
+
+    public String PegarSenha(String nomeUsuario, String emailUsuario) {
+        ModelUsuario usuario = obterUsuario(emailUsuario);
+        if (usuario != null && usuario.getNomeUsuario() != null && usuario.getNomeUsuario().equals(nomeUsuario)) {
+            return PegarSenha(usuario.getSenhaUsuario());
+        }
+        return null;
+    }
+
+    @Override
+    public ModelUsuario obterUsuario(String emailUsuario) {
+        try {
+            Optional<ModelUsuario> optionalUsuario = repositoryUsuario.findByEmailUsuario(emailUsuario);
+            if (optionalUsuario.isPresent()) {
+                return optionalUsuario.get();
+            } else {
+                System.err.println("Usuário com email " + emailUsuario + " não encontrado.");
+                return null;
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao obter usuário: " + e.getMessage());
+            return null;
+        }
     }
 
 
+    }

@@ -19,7 +19,7 @@ public class ModelTransacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idTransacao;
 
-    @Column(name = "valor_transacao", nullable = false, precision = 10, scale = 2)
+    @Column(name = "valor_transacao", nullable = false, length = 255)
     private String descricaoTransacao;
 
     @Column(name = "data_transacao", nullable = false)

@@ -1,5 +1,6 @@
 package br.com.jhefferson.BackEnd.Service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -18,13 +19,15 @@ public class ServiceContas implements InterfaceConta {
     }
 
     @Override
-    public ModelConta criarConta(String nomeUsuario,
+    public ModelConta criarConta(
+        String nomeUsuario,
          String emailUsuario,
-          String senhaUsuario) {
+          String senhaUsuario
+        ) {
         try {
             ModelConta conta = new ModelConta();
             conta.setNomeConta(nomeUsuario);
-            conta.setSaldoConta(0.0);
+            conta.setSaldoConta(BigDecimal.ZERO);
             return repositoryConta.save(conta);
         } catch (Exception e) {
             System.err.println("Erro ao criar conta: " + e.getMessage());

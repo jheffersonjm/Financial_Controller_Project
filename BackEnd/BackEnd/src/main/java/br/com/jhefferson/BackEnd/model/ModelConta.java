@@ -1,5 +1,7 @@
 package br.com.jhefferson.BackEnd.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,7 +27,7 @@ private String nomeConta;
 private ModelUsuario idUsuarios;
 
 @Column(name = "saldo_conta", nullable = false, precision = 10, scale = 2)
-private Double saldoConta;
+private BigDecimal saldoConta;
 
 public Long getIdConta() {
     return idConta;
@@ -51,11 +53,11 @@ public void setIdUsuarios(ModelUsuario idUsuarios) {
     this.idUsuarios = idUsuarios;
 }
 
-public Double getSaldoConta() {
+public BigDecimal getSaldoConta() {
     return saldoConta;
 }
 
-public void setSaldoConta(Double saldoConta) {
+public void setSaldoConta(BigDecimal saldoConta) {
     this.saldoConta = saldoConta;
 }
 
