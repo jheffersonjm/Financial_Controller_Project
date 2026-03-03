@@ -1,6 +1,7 @@
 package br.com.jhefferson.BackEnd.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -35,6 +36,18 @@ public class ServiceContas implements InterfaceConta {
         }
     }
 
+    public ModelConta criarConta(ModelConta novaConta) {
+        try {
+            if (novaConta.getSaldoConta() == null) {
+                novaConta.setSaldoConta(BigDecimal.ZERO);
+            }
+            return repositoryConta.save(novaConta);
+        } catch (Exception e) {
+            System.err.println("Erro ao criar conta: " + e.getMessage());
+            return null;
+        }
+    }
+
     @Override
     public ModelConta atualizarConta(
         Long idConta,
@@ -46,6 +59,28 @@ public class ServiceContas implements InterfaceConta {
             if (optionalConta.isPresent()) {
                 ModelConta contaExistente = optionalConta.get();
                 contaExistente.setNomeConta(nomeUsuario);
+                return repositoryConta.save(contaExistente);
+            }
+            System.err.println("Conta com ID " + idConta + " não encontrada.");
+            return null;
+        } catch (Exception e) {
+            System.err.println("Erro ao atualizar conta: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public ModelConta atualizarConta(Long idConta, ModelConta dadosAtualizados) {
+        try {
+            Optional<ModelConta> optionalConta = repositoryConta.findById(idConta);
+            if (optionalConta.isPresent()) {
+                ModelConta contaExistente = optionalConta.get();
+                contaExistente.setNomeConta(dadosAtualizados.getNomeConta());
+                if (dadosAtualizados.getSaldoConta() != null) {
+                    contaExistente.setSaldoConta(dadosAtualizados.getSaldoConta());
+                }
+                if (dadosAtualizados.getIdUsuarios() != null) {
+                    contaExistente.setIdUsuarios(dadosAtualizados.getIdUsuarios());
+                }
                 return repositoryConta.save(contaExistente);
             }
             System.err.println("Conta com ID " + idConta + " não encontrada.");
@@ -78,4 +113,14 @@ public class ServiceContas implements InterfaceConta {
             return null;
         }
     }
+
+    @Override
+    public List<ModelConta> obterTodosRegistros() {
+    try {
+        return repositoryConta.findAll();
+   } catch (Exception e) {
+        System.err.println("Erro ao obter todos os registros: " + e.getMessage());
+        return null;
+    }
 }
+    }

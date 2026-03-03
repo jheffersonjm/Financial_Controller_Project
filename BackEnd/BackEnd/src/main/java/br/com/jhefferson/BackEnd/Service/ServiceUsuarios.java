@@ -103,9 +103,9 @@ public class ServiceUsuarios implements InterfaceUsuarios{
     @Override
     public ModelUsuario obterUsuario(String emailUsuario) {
         try {
-            Optional<ModelUsuario> optionalUsuario = repositoryUsuario.findByEmailUsuario(emailUsuario);
-            if (optionalUsuario.isPresent()) {
-                return optionalUsuario.get();
+            Optional<ModelUsuario> usuario = repositoryUsuario.findByEmailUsuario(emailUsuario);
+            if (usuario.isPresent()) {
+                return usuario.get();
             } else {
                 System.err.println("Usuário com email " + emailUsuario + " não encontrado.");
                 return null;

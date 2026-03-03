@@ -1,6 +1,7 @@
 package br.com.jhefferson.BackEnd.Service;
 
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
@@ -83,6 +84,16 @@ public class ServiceTransacao implements InterfaceTransacao {
             return null;
         } catch (Exception e) {
             System.err.println("Erro ao obter transação: " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public List<ModelTransacao> obterTodasTransacoes() {
+        try {
+            return repositoryTransacao.findAll();
+        } catch (Exception e) {
+            System.err.println("Erro ao obter todas as transações: " + e.getMessage());
             return null;
         }
     }
