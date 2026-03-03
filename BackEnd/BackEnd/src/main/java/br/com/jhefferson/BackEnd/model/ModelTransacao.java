@@ -28,4 +28,37 @@ public class ModelTransacao {
     @ManyToOne
     @JoinColumn(name = "id_conta", nullable = false)
     private ModelConta idConta;
+
+    public Long getIdTransacao() {
+        return idTransacao;
+    }
+
+    public void setIdTransacao(Long idTransacao) {
+        this.idTransacao = idTransacao;
+    }
+
+    public String getDescricaoTransacao() {
+        return descricaoTransacao;
+    }
+
+    public void setDescricaoTransacao(String descricaoTransacao) {
+        this.descricaoTransacao = descricaoTransacao;
+    }
+
+    public LocalTime getDataTransacao() {
+        return dataTransacao;
+    }
+
+    public void setDataTransacao(LocalTime dataTransacao) {
+        this.dataTransacao = dataTransacao;
+    }
+
+    public ModelConta getIdConta() {
+        return idConta;
+    }
+
+    public void setIdConta(ModelConta idConta) {
+        this.idConta = idConta;
+    }
+    
 }
