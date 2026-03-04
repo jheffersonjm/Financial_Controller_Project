@@ -40,21 +40,13 @@ public class ControllerUsuarios {
 
     @PostMapping("/salvarUsuario")
     public ModelUsuario salvarUsuario(@RequestBody ModelUsuario usuario) {
-        return serviceUsuarios.criarUsuario(
-            usuario.getNomeUsuario(),
-            usuario.getEmailUsuario(),
-            usuario.getSenhaUsuario()
-        );
+        return serviceUsuarios.criarUsuario(usuario);
     }
 
     @PutMapping("/atualizarUsuario/{id}")
     public ModelUsuario atualizarUsuario(@PathVariable Long id, @RequestBody ModelUsuario usuario) {
-        return serviceUsuarios.atualizarUsuario(
-            id,
-            usuario.getNomeUsuario(),
-            usuario.getEmailUsuario(),
-            usuario.getSenhaUsuario()
-        );
+        usuario.setIdUsuario(id);
+        return serviceUsuarios.atualizarUsuario(usuario);
     }
     
     @DeleteMapping("/deletarUsuario/{id}")

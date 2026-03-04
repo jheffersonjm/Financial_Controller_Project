@@ -17,18 +17,12 @@ public class ServiceUsuarios implements InterfaceUsuarios{
     }
 
     @Override
-    public ModelUsuario criarUsuario(String nomeUsuario, String emailUsuario, String senhaUsuario) {
-
-        String nome = nomeUsuario;
-        String email = emailUsuario;
-        String senha = PegarSenha(senhaUsuario);
+    public ModelUsuario criarUsuario(ModelUsuario usuario) {
+        String nome = usuario.getNomeUsuario();
+        String email = usuario.getEmailUsuario();
+        String senha = PegarSenha(usuario.getSenhaUsuario());
 
         try {
-           ModelUsuario usuario = new ModelUsuario();
-        usuario.setNomeUsuario(nome);
-        usuario.setEmailUsuario(email);
-        usuario.setSenhaUsuario(senha);
-        
        return repositoryUsuario.save(usuario);
         } catch (Exception e) {
             System.err.println("Erro ao criar usuário: " + e.getMessage());
@@ -38,17 +32,17 @@ public class ServiceUsuarios implements InterfaceUsuarios{
     }
 
     @Override
-    public ModelUsuario atualizarUsuario(Long idUsuario, String nomeUsuario, String emailUsuario, String senhaUsuario) {
+    public ModelUsuario atualizarUsuario(ModelUsuario usuario) {
         try {
-            Optional<ModelUsuario> optionalUsuario = repositoryUsuario.findById(idUsuario);
+            Optional<ModelUsuario> optionalUsuario = repositoryUsuario.findById(usuario.getIdUsuario());
             if (optionalUsuario.isPresent()) {
                 ModelUsuario usuarioExistente = optionalUsuario.get();
-                usuarioExistente.setNomeUsuario(nomeUsuario);
-                usuarioExistente.setEmailUsuario(emailUsuario);
-                usuarioExistente.setSenhaUsuario(senhaUsuario);
+                usuarioExistente.setNomeUsuario(usuario.getNomeUsuario());
+                usuarioExistente.setEmailUsuario(usuario.getEmailUsuario());
+                usuarioExistente.setSenhaUsuario(usuario.getSenhaUsuario());
                 return repositoryUsuario.save(usuarioExistente);
             } else {
-                System.err.println("Usuário com ID " + idUsuario + " não encontrado.");
+                System.err.println("Usuário com ID " + usuario.getIdUsuario() + " não encontrado.");
                 return null;
             }
         } catch (Exception e) {
@@ -115,6 +109,8 @@ public class ServiceUsuarios implements InterfaceUsuarios{
             return null;
         }
     }
+
+   
 
 
     }
