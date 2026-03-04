@@ -6,6 +6,7 @@
 - [Estrutura do Projeto](#estrutura-do-projeto)
 - [Arquitetura](#arquitetura)
 - [Modelo de Dados (DER)](#modelo-de-dados-der)
+- [Roadmap de Desenvolvimento](#roadmap-de-desenvolvimento)
 - [Configuração e Instalação](#configuração-e-instalação)
 - [API Endpoints](#api-endpoints)
 - [Modelos de Dados](#modelos-de-dados)
@@ -209,131 +210,357 @@ CREATE TABLE transacoes (
 CREATE INDEX idx_data_transacao ON transacoes(data_transacao);
 CREATE INDEX idx_tipo_transacao ON transacoes(tipo_transacao);
 CREATE INDEX idx_email_usuario ON transacoes(email_usuario);
-
--- Comentários nas colunas
-COMMENT ON COLUMN transacoes.id_transacao IS 'Identificador único da transação';
-COMMENT ON COLUMN transacoes.descricao IS 'Descrição detalhada da transação';
-COMMENT ON COLUMN transacoes.valor IS 'Valor monetário da transação';
-COMMENT ON COLUMN transacoes.data_transacao IS 'Data de realização da transação';
-COMMENT ON COLUMN transacoes.tipo_transacao IS 'Tipo: RECEITA ou DESPESA';
-COMMENT ON COLUMN transacoes.nome_usuario IS 'Nome do usuário responsável';
-COMMENT ON COLUMN transacoes.email_usuario IS 'Email do usuário';
-COMMENT ON COLUMN transacoes.senha_usuario IS 'Senha criptografada do usuário';
-COMMENT ON COLUMN transacoes.created_at IS 'Data/hora de criação do registro';
-COMMENT ON COLUMN transacoes.updated_at IS 'Data/hora da última atualização';
 ```
 
-### Dicionário de Dados
+---
 
-| Campo | Tipo | Tamanho | Nulo | Default | Descrição |
-|-------|------|---------|------|---------|-----------|
-| **id_transacao** | BIGINT | - | NÃO | AUTO_INCREMENT | Chave primária, identificador único |
-| **descricao** | VARCHAR | 255 | NÃO | - | Descrição detalhada da transação |
-| **valor** | DECIMAL | 19,2 | NÃO | - | Valor em formato monetário (ex: 1500.50) |
-| **data_transacao** | DATE | - | NÃO | - | Data da transação (YYYY-MM-DD) |
-| **tipo_transacao** | VARCHAR | 20 | NÃO | - | Tipo da transação: 'RECEITA' ou 'DESPESA' |
-| **nome_usuario** | VARCHAR | 100 | SIM | NULL | Nome completo do usuário |
-| **email_usuario** | VARCHAR | 100 | SIM | NULL | Email do usuário |
-| **senha_usuario** | VARCHAR | 255 | SIM | NULL | Senha criptografada (BCrypt recomendado) |
-| **created_at** | TIMESTAMP | - | NÃO | NOW() | Data/hora de criação automática |
-| **updated_at** | TIMESTAMP | - | NÃO | NOW() | Data/hora da última modificação |
+## 🗺️ Roadmap de Desenvolvimento
 
-### Relacionamentos Futuros (Expansão)
+### Planejamento Completo do Projeto (12 Semanas)
+
+| Fase | Período | Objetivo | Entregas | Resultado Esperado | Status |
+|------|---------|----------|----------|-------------------|--------|
+| **🧱 FASE 1<br>Base Estrutural** | Semanas 1-2 | Arrumar a casa antes de colocar porta blindada | ✔ Criar entidade Usuario separada<br>✔ Criar entidade Categoria<br>✔ Relacionamento 1:N (Usuario → Transacao)<br>✔ Remover senha de Transacao<br>✔ Implementar Soft Delete (deleted_at)<br>✔ Implementar auditoria (created_by, updated_by) | Banco normalizado e arquitetura preparada para crescer | ⏳ Pendente |
+| **🔒 FASE 2<br>Segurança Fundamental** | Semanas 3-4 | Sair do modo laboratório e entrar no modo produção | ✔ Implementar Spring Security<br>✔ Implementar autenticação JWT<br>✔ Criptografar senhas com BCrypt<br>✔ Criar endpoint de login<br>✔ Controlar permissões por usuário<br>✔ Proteger rotas privadas | API autenticada, segura e pronta para multiusuário | ⏳ Pendente |
+| **🧠 FASE 3<br>Validação e Tratamento Global** | Semanas 5-6 | Parar de confiar no usuário | ✔ Implementar @Valid<br>✔ Bean Validation (@Email, @NotNull, @Positive)<br>✔ Criar @ControllerAdvice global<br>✔ Exception customizada<br>✔ Padronizar resposta de erro | API robusta, previsível e profissional | ⏳ Pendente |
+| **📊 FASE 4<br>Funcionalidades Avançadas** | Semanas 7-8 | Transformar CRUD em sistema real | ✔ Busca por data<br>✔ Filtro por tipo<br>✔ Paginação com Pageable<br>✔ Ordenação dinâmica<br>✔ Relatórios de saldo<br>✔ Export CSV | API madura, utilizável por frontend real | ⏳ Pendente |
+| **🧪 FASE 5<br>Qualidade de Código** | Semanas 9-10 | Engenharia, não gambiarra funcional | ✔ Testes unitários com JUnit<br>✔ Testes de integração com MockMvc<br>✔ Cobertura > 70% (80% depois)<br>✔ Swagger/OpenAPI<br>✔ Logs estruturados (SLF4J)<br>✔ Ativar Actuator | Código confiável. Refatorações seguras | ⏳ Pendente |
+| **⚡ FASE 6<br>Performance e Infraestrutura** | Semanas 11-12 | Pensar como sistema que aguenta carga | ✔ Cache (Redis ou Caffeine)<br>✔ Índices compostos<br>✔ Otimizar queries<br>✔ Dockerfile funcional<br>✔ CI/CD com GitHub Actions<br>✔ Health check<br>✔ Monitoramento básico | API preparada para deploy real | ⏳ Pendente |
+
+### Legenda de Status:
+- ✅ **Completo** - Fase finalizada e testada
+- 🔄 **Em Andamento** - Desenvolvimento ativo
+- ⏳ **Pendente** - Aguardando início
+- ⚠️ **Bloqueado** - Dependência não resolvida
+- ❌ **Cancelado** - Removido do escopo
+
+### Progresso Geral do Projeto:
 
 ```
-┌─────────────────┐         ┌──────────────────┐         ┌─────────────────┐
-│    USUARIOS     │         │   TRANSACOES     │         │   CATEGORIAS    │
-├─────────────────┤         ├──────────────────┤         ├─────────────────┤
-│ PK id_usuario   │────┐    │ PK id_transacao  │    ┌────│ PK id_categoria │
-│    nome         │    │    │ FK id_usuario    │────┘    │    nome         │
-│    email        │    └────│    descricao     │         │    tipo         │
-│    senha        │         │    valor         │         │    cor          │
-│    created_at   │         │    data          │         │    icone        │
-└─────────────────┘         │    tipo          │         └─────────────────┘
-                            │ FK id_categoria  │
-                            │    created_at    │
-                            └──────────────────┘
+Fase 1: ░░░░░░░░░░ 0%  (0/6 entregas)
+Fase 2: ░░░░░░░░░░ 0%  (0/6 entregas)
+Fase 3: ░░░░░░░░░░ 0%  (0/5 entregas)
+Fase 4: ░░░░░░░░░░ 0%  (0/6 entregas)
+Fase 5: ░░░░░░░░░░ 0%  (0/6 entregas)
+Fase 6: ░░░░░░░░░░ 0%  (0/7 entregas)
 
-RELACIONAMENTOS PLANEJADOS:
-  1:N → Um USUARIO pode ter várias TRANSACOES
-  1:N → Uma CATEGORIA pode ter várias TRANSACOES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PROGRESSO TOTAL: ░░░░░░░░░░ 0%
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-### Exemplos de Dados
+### Detalhamento das Fases:
 
-```sql
--- Inserir transações de exemplo
-INSERT INTO transacoes (descricao, valor, data_transacao, tipo_transacao, nome_usuario, email_usuario) 
-VALUES 
-('Salário Março', 5000.00, '2026-03-01', 'RECEITA', 'João Silva', 'joao@email.com'),
-('Aluguel', 1200.00, '2026-03-05', 'DESPESA', 'João Silva', 'joao@email.com'),
-('Freelance Web', 1500.00, '2026-03-10', 'RECEITA', 'Maria Santos', 'maria@email.com'),
-('Conta de Luz', 150.00, '2026-03-15', 'DESPESA', 'Maria Santos', 'maria@email.com');
+#### 🧱 FASE 1 - Base Estrutural (Semanas 1-2)
 
--- Consultar todas as receitas
-SELECT * FROM transacoes WHERE tipo_transacao = 'RECEITA';
+**Objetivo:** Normalizar o banco de dados e preparar a arquitetura para escalar.
 
--- Consultar saldo por usuário
-SELECT 
-    email_usuario,
-    SUM(CASE WHEN tipo_transacao = 'RECEITA' THEN valor ELSE 0 END) as total_receitas,
-    SUM(CASE WHEN tipo_transacao = 'DESPESA' THEN valor ELSE 0 END) as total_despesas,
-    SUM(CASE WHEN tipo_transacao = 'RECEITA' THEN valor ELSE -valor END) as saldo
-FROM transacoes
-GROUP BY email_usuario;
+**Tarefas Detalhadas:**
+
+1. **Criar Entidade Usuario**
+```java
+@Entity
+public class Usuario {
+    @Id @GeneratedValue
+    private Long id;
+    private String nome;
+    private String email;
+    private String senha; // BCrypt
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    
+    @OneToMany(mappedBy = "usuario")
+    private List<Transacao> transacoes;
+}
 ```
 
-### Diagrama ER Completo (Mermaid)
+2. **Criar Entidade Categoria**
+```java
+@Entity
+public class Categoria {
+    @Id @GeneratedValue
+    private Long id;
+    private String nome;
+    private String tipo; // RECEITA/DESPESA
+    private String cor;
+    private String icone;
+}
+```
 
-```mermaid
-erDiagram
-    TRANSACOES {
-        bigint id_transacao PK "Auto Increment"
-        varchar descricao "NOT NULL"
-        decimal valor "NOT NULL, > 0"
-        date data_transacao "NOT NULL"
-        varchar tipo_transacao "RECEITA ou DESPESA"
-        varchar nome_usuario
-        varchar email_usuario
-        varchar senha_usuario
-        timestamp created_at "DEFAULT NOW()"
-        timestamp updated_at "DEFAULT NOW()"
+3. **Implementar Soft Delete**
+```java
+@Entity
+@SQLDelete(sql = "UPDATE transacoes SET deleted_at = NOW() WHERE id = ?")
+@Where(clause = "deleted_at IS NULL")
+public class Transacao {
+    // ...
+    private LocalDateTime deletedAt;
+}
+```
+
+4. **Implementar Auditoria**
+```java
+@Entity
+@EntityListeners(AuditingEntityListener.class)
+public class Transacao {
+    @CreatedBy
+    private String createdBy;
+    
+    @LastModifiedBy
+    private String updatedBy;
+}
+```
+
+**Critérios de Aceitação:**
+- [ ] Banco de dados normalizado (3FN)
+- [ ] Migrations funcionando (Flyway/Liquibase)
+- [ ] Testes de relacionamento 1:N
+- [ ] Soft delete testado
+
+---
+
+#### 🔒 FASE 2 - Segurança Fundamental (Semanas 3-4)
+
+**Objetivo:** Implementar autenticação e autorização robustas.
+
+**Tarefas Detalhadas:**
+
+1. **Configurar Spring Security**
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) {
+        return http
+            .csrf().disable()
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/auth/**").permitAll()
+                .anyRequest().authenticated()
+            )
+            .sessionManagement(session -> 
+                session.sessionCreationPolicy(STATELESS)
+            )
+            .build();
     }
+}
 ```
 
-### Estatísticas da Tabela
-
-| Métrica | Valor Estimado | Observação |
-|---------|----------------|------------|
-| **Tamanho médio do registro** | ~350 bytes | Incluindo índices |
-| **Crescimento estimado** | 100 registros/mês | Baseado em uso médio |
-| **Espaço em disco (1 ano)** | ~420 KB | Aproximado |
-| **Performance SELECT** | < 50ms | Com índices apropriados |
-| **Performance INSERT** | < 10ms | Operação otimizada |
-
-### Índices e Performance
-
-```sql
--- Consultas otimizadas por índice
-
--- 1. Busca por data (usa idx_data_transacao)
-SELECT * FROM transacoes 
-WHERE data_transacao BETWEEN '2026-03-01' AND '2026-03-31';
-
--- 2. Busca por tipo (usa idx_tipo_transacao)
-SELECT * FROM transacoes 
-WHERE tipo_transacao = 'RECEITA';
-
--- 3. Busca por usuário (usa idx_email_usuario)
-SELECT * FROM transacoes 
-WHERE email_usuario = 'joao@email.com';
-
--- 4. Busca composta (otimizada)
-SELECT * FROM transacoes 
-WHERE email_usuario = 'joao@email.com' 
-  AND tipo_transacao = 'RECEITA' 
-  AND data_transacao >= '2026-03-01';
+2. **Implementar JWT**
+```java
+public class JwtService {
+    public String generateToken(Usuario usuario);
+    public boolean validateToken(String token);
+    public String extractUsername(String token);
+}
 ```
+
+3. **Criar Endpoint de Login**
+```java
+@PostMapping("/auth/login")
+public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+    // Autenticar e retornar JWT
+}
+```
+
+**Critérios de Aceitação:**
+- [ ] Login funcionando com JWT
+- [ ] Rotas protegidas
+- [ ] Refresh token implementado
+- [ ] Testes de segurança passando
+
+---
+
+#### 🧠 FASE 3 - Validação e Tratamento Global (Semanas 5-6)
+
+**Objetivo:** API robusta com validações e tratamento de erros padronizado.
+
+**Tarefas Detalhadas:**
+
+1. **Bean Validation**
+```java
+public class TransacaoDTO {
+    @NotBlank(message = "Descrição obrigatória")
+    private String descricao;
+    
+    @Positive(message = "Valor deve ser positivo")
+    private BigDecimal valor;
+    
+    @Email(message = "Email inválido")
+    private String email;
+}
+```
+
+2. **Exception Handler Global**
+```java
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidation(ex) {
+        // Retornar erro padronizado
+    }
+}
+```
+
+**Critérios de Aceitação:**
+- [ ] Todas as entradas validadas
+- [ ] Erros padronizados
+- [ ] Mensagens em português
+- [ ] Documentação de erros
+
+---
+
+#### 📊 FASE 4 - Funcionalidades Avançadas (Semanas 7-8)
+
+**Objetivo:** Sistema real com funcionalidades úteis.
+
+**Tarefas Detalhadas:**
+
+1. **Paginação**
+```java
+@GetMapping
+public Page<Transacao> listar(
+    @PageableDefault(size = 20) Pageable pageable
+) {
+    return service.listarPaginado(pageable);
+}
+```
+
+2. **Filtros Dinâmicos**
+```java
+public Page<Transacao> buscar(
+    LocalDate dataInicio,
+    LocalDate dataFim,
+    TipoTransacao tipo,
+    Pageable pageable
+);
+```
+
+3. **Relatórios**
+```java
+public RelatorioDTO gerarRelatorio(
+    Long usuarioId, 
+    LocalDate inicio, 
+    LocalDate fim
+) {
+    // Calcular saldo, totais, gráficos
+}
+```
+
+**Critérios de Aceitação:**
+- [ ] Paginação funcionando
+- [ ] Filtros testados
+- [ ] Relatórios precisos
+- [ ] Export CSV gerando
+
+---
+
+#### 🧪 FASE 5 - Qualidade de Código (Semanas 9-10)
+
+**Objetivo:** Código confiável e bem documentado.
+
+**Tarefas Detalhadas:**
+
+1. **Testes Unitários**
+```java
+@Test
+void deveCriarTransacao() {
+    // Given
+    TransacaoDTO dto = criarDTO();
+    
+    // When
+    Transacao result = service.criar(dto);
+    
+    // Then
+    assertNotNull(result.getId());
+    assertEquals(dto.getDescricao(), result.getDescricao());
+}
+```
+
+2. **Swagger**
+```java
+@Configuration
+public class SwaggerConfig {
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+            .info(new Info()
+                .title("Financial Controller API")
+                .version("1.0"));
+    }
+}
+```
+
+**Critérios de Aceitação:**
+- [ ] Cobertura > 70%
+- [ ] Swagger acessível
+- [ ] Logs estruturados
+- [ ] Actuator habilitado
+
+---
+
+#### ⚡ FASE 6 - Performance e Infraestrutura (Semanas 11-12)
+
+**Objetivo:** Sistema pronto para produção.
+
+**Tarefas Detalhadas:**
+
+1. **Cache**
+```java
+@Cacheable(value = "transacoes", key = "#id")
+public Transacao buscarPorId(Long id) {
+    return repository.findById(id)
+        .orElseThrow();
+}
+```
+
+2. **Dockerfile**
+```dockerfile
+FROM openjdk:17-jdk-slim
+COPY target/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "/app.jar"]
+```
+
+3. **CI/CD**
+```yaml
+# .github/workflows/ci.yml
+name: CI
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        run: mvn clean install
+```
+
+**Critérios de Aceitação:**
+- [ ] Cache funcionando
+- [ ] Docker build sucesso
+- [ ] CI/CD rodando
+- [ ] Métricas coletadas
+
+---
+
+### Próximos Passos:
+
+1. **Imediato (Esta Semana):**
+   - [ ] Criar branch `feat/fase-1-estrutural`
+   - [ ] Modelar entidade Usuario
+   - [ ] Criar migrations
+
+2. **Curto Prazo (Próximas 2 Semanas):**
+   - [ ] Completar Fase 1
+   - [ ] Iniciar Fase 2
+
+3. **Médio Prazo (Próximo Mês):**
+   - [ ] Completar Fases 3 e 4
+   - [ ] Revisar arquitetura
+
+4. **Longo Prazo (3 Meses):**
+   - [ ] Todas as fases completas
+   - [ ] Deploy em produção
 
 ---
 
@@ -394,12 +621,6 @@ mvn clean install
 mvn spring-boot:run
 ```
 
-**Ou execute diretamente o arquivo JAR:**
-```bash
-mvn package
-java -jar target/BackEnd-0.0.1-SNAPSHOT.jar
-```
-
 #### 5. Verifique a Execução
 ```bash
 # A aplicação deve iniciar em:
@@ -431,274 +652,6 @@ curl http://localhost:8080/transacoes/PegarTodas/1
 
 ---
 
-### 1️⃣ **GET - Buscar Transações com Parâmetros**
-
-```http
-GET /transacoes/Pegar?id=1&param=teste
-```
-
-**Descrição:**  
-Busca transações baseado em parâmetros fornecidos. 
-
-⚠️ **Nota:** Atualmente ignora os parâmetros e retorna todas as transações (comportamento a ser corrigido).
-
-**Parâmetros Query:**
-| Parâmetro | Tipo | Obrigatório | Descrição |
-|-----------|------|-------------|-----------|
-| `id` | int | Sim | ID da transação |
-| `param` | String | Sim | Parâmetro adicional de busca |
-
-**Exemplo de Requisição:**
-```bash
-curl -X GET "http://localhost:8080/transacoes/Pegar?id=1&param=receita"
-```
-
-**Resposta Sucesso (200 OK):**
-```json
-[
-  {
-    "id": 1,
-    "descricao": "Salário",
-    "valor": 5000.00,
-    "data": "2026-03-01",
-    "tipo": "RECEITA"
-  },
-  {
-    "id": 2,
-    "descricao": "Aluguel",
-    "valor": 1200.00,
-    "data": "2026-03-05",
-    "tipo": "DESPESA"
-  }
-]
-```
-
----
-
-### 2️⃣ **GET - Listar Todas as Transações**
-
-```http
-GET /transacoes/PegarTodas/{id}
-```
-
-**Descrição:**  
-Retorna todas as transações cadastradas no sistema.
-
-⚠️ **Nota:** O parâmetro `{id}` é mantido por compatibilidade mas não é utilizado.
-
-**Parâmetros Path:**
-| Parâmetro | Tipo | Descrição |
-|-----------|------|-----------|
-| `id` | int | ID não utilizado (compatibilidade) |
-
-**Exemplo de Requisição:**
-```bash
-curl -X GET "http://localhost:8080/transacoes/PegarTodas/1"
-```
-
-**Resposta Sucesso (200 OK):**
-```json
-[
-  {
-    "id": 1,
-    "descricao": "Salário Março",
-    "valor": 5000.00,
-    "data": "2026-03-01",
-    "tipo": "RECEITA",
-    "nomeUsuario": "João Silva",
-    "emailUsuario": "joao@email.com"
-  },
-  {
-    "id": 2,
-    "descricao": "Conta de Luz",
-    "valor": 150.00,
-    "data": "2026-03-05",
-    "tipo": "DESPESA",
-    "nomeUsuario": "João Silva",
-    "emailUsuario": "joao@email.com"
-  }
-]
-```
-
----
-
-### 3️⃣ **POST - Criar Nova Transação**
-
-```http
-POST /transacoes/Criar
-Content-Type: application/json
-```
-
-**Descrição:**  
-Cria uma nova transação no sistema.
-
-**Headers:**
-```
-Content-Type: application/json
-```
-
-**Body (JSON):**
-```json
-{
-  "descricao": "Freelance Web Design",
-  "valor": 1500.00,
-  "data": "2026-03-10",
-  "tipo": "RECEITA",
-  "nomeUsuario": "Maria Santos",
-  "emailUsuario": "maria@email.com",
-  "senhaUsuario": "senha123"
-}
-```
-
-**Campos Obrigatórios:**
-| Campo | Tipo | Descrição |
-|-------|------|-----------|
-| `descricao` | String | Descrição da transação |
-| `valor` | BigDecimal | Valor da transação |
-| `data` | LocalDate | Data da transação (formato: YYYY-MM-DD) |
-| `tipo` | String | RECEITA ou DESPESA |
-| `nomeUsuario` | String | Nome do usuário |
-| `emailUsuario` | String | Email do usuário |
-| `senhaUsuario` | String | Senha do usuário |
-
-**Exemplo de Requisição:**
-```bash
-curl -X POST http://localhost:8080/transacoes/Criar \
-  -H "Content-Type: application/json" \
-  -d '{
-    "descricao": "Consulta Médica",
-    "valor": 250.00,
-    "data": "2026-03-15",
-    "tipo": "DESPESA",
-    "nomeUsuario": "Carlos Lima",
-    "emailUsuario": "carlos@email.com",
-    "senhaUsuario": "senha456"
-  }'
-```
-
-**Resposta Sucesso (201 Created):**
-```json
-{
-  "id": 3,
-  "descricao": "Consulta Médica",
-  "valor": 250.00,
-  "data": "2026-03-15",
-  "tipo": "DESPESA",
-  "nomeUsuario": "Carlos Lima",
-  "emailUsuario": "carlos@email.com"
-}
-```
-
-**Resposta Erro (500 Internal Server Error):**
-```json
-{
-  "timestamp": "2026-03-04T14:30:00",
-  "status": 500,
-  "error": "Internal Server Error",
-  "message": "Erro ao criar transação"
-}
-```
-
----
-
-### 4️⃣ **PUT - Atualizar Transação**
-
-```http
-PUT /transacoes/Atualizar/{id}
-Content-Type: application/json
-```
-
-**Descrição:**  
-Atualiza uma transação existente. O ID da URL sobrescreve qualquer ID enviado no corpo da requisição.
-
-**Parâmetros Path:**
-| Parâmetro | Tipo | Descrição |
-|-----------|------|-----------|
-| `id` | Long | ID da transação a ser atualizada |
-
-**Body (JSON):**
-```json
-{
-  "descricao": "Freelance - Atualizado",
-  "valor": 2000.00,
-  "data": "2026-03-10",
-  "tipo": "RECEITA"
-}
-```
-
-**Exemplo de Requisição:**
-```bash
-curl -X PUT http://localhost:8080/transacoes/Atualizar/3 \
-  -H "Content-Type: application/json" \
-  -d '{
-    "descricao": "Consulta Especialista",
-    "valor": 350.00,
-    "data": "2026-03-15",
-    "tipo": "DESPESA"
-  }'
-```
-
-**Resposta Sucesso (200 OK):**
-```json
-{
-  "id": 3,
-  "descricao": "Consulta Especialista",
-  "valor": 350.00,
-  "data": "2026-03-15",
-  "tipo": "DESPESA",
-  "nomeUsuario": "Carlos Lima",
-  "emailUsuario": "carlos@email.com"
-}
-```
-
-**Resposta Erro (404 Not Found):**
-```json
-{
-  "timestamp": "2026-03-04T14:35:00",
-  "status": 404,
-  "error": "Not Found",
-  "message": "Transação com ID 999 não encontrada"
-}
-```
-
----
-
-### 5️⃣ **DELETE - Deletar Transação**
-
-```http
-DELETE /transacoes/Deletar/{id}
-```
-
-**Descrição:**  
-Remove uma transação do sistema permanentemente.
-
-**Parâmetros Path:**
-| Parâmetro | Tipo | Descrição |
-|-----------|------|-----------|
-| `id` | Long | ID da transação a ser deletada |
-
-**Exemplo de Requisição:**
-```bash
-curl -X DELETE http://localhost:8080/transacoes/Deletar/3
-```
-
-**Resposta Sucesso (204 No Content):**
-```
-(sem corpo de resposta)
-```
-
-**Resposta Erro (404 Not Found):**
-```json
-{
-  "timestamp": "2026-03-04T14:40:00",
-  "status": 404,
-  "error": "Not Found",
-  "message": "Transação não encontrada"
-}
-```
-
----
-
 ## 📊 Modelos de Dados
 
 ### ModelTransacao
@@ -725,7 +678,7 @@ public class ModelTransacao {
     private LocalDate data;
     
     @Column(name = "tipo_transacao", nullable = false, length = 20)
-    private String tipo; // "RECEITA" ou "DESPESA"
+    private String tipo;
     
     @Column(name = "nome_usuario", length = 100)
     private String nomeUsuario;
@@ -734,7 +687,7 @@ public class ModelTransacao {
     private String emailUsuario;
     
     @Column(name = "senha_usuario", length = 255)
-    private String senhaUsuario; // ⚠️ Deve ser criptografada
+    private String senhaUsuario;
     
     @Column(name = "created_at", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -747,99 +700,6 @@ public class ModelTransacao {
     // Getters e Setters
 }
 ```
-
-**Estrutura JSON:**
-```json
-{
-  "id": Long,                    // ID único (gerado automaticamente)
-  "descricao": String,           // Descrição da transação (obrigatório)
-  "valor": BigDecimal,           // Valor em decimal (obrigatório)
-  "data": "YYYY-MM-DD",          // Data no formato ISO (obrigatório)
-  "tipo": String,                // "RECEITA" ou "DESPESA" (obrigatório)
-  "nomeUsuario": String,         // Nome do usuário
-  "emailUsuario": String,        // Email do usuário
-  "senhaUsuario": String         // Senha (não retornada em GET)
-}
-```
-
-**Exemplo Completo:**
-```json
-{
-  "id": 1,
-  "descricao": "Venda de Produto",
-  "valor": 3500.50,
-  "data": "2026-03-04",
-  "tipo": "RECEITA",
-  "nomeUsuario": "Ana Paula",
-  "emailUsuario": "ana.paula@empresa.com",
-  "senhaUsuario": null
-}
-```
-
----
-
-## 📝 Exemplos de Requisições
-
-### Usando cURL
-
-#### Criar Transação (Receita)
-```bash
-curl -X POST http://localhost:8080/transacoes/Criar \
-  -H "Content-Type: application/json" \
-  -d '{
-    "descricao": "Venda Freelance",
-    "valor": 2500.00,
-    "data": "2026-03-04",
-    "tipo": "RECEITA",
-    "nomeUsuario": "Pedro Costa",
-    "emailUsuario": "pedro@email.com",
-    "senhaUsuario": "senha789"
-  }'
-```
-
-#### Criar Transação (Despesa)
-```bash
-curl -X POST http://localhost:8080/transacoes/Criar \
-  -H "Content-Type: application/json" \
-  -d '{
-    "descricao": "Compra Notebook",
-    "valor": 4500.00,
-    "data": "2026-03-04",
-    "tipo": "DESPESA",
-    "nomeUsuario": "Fernanda Oliveira",
-    "emailUsuario": "fernanda@email.com",
-    "senhaUsuario": "senha321"
-  }'
-```
-
-#### Listar Todas
-```bash
-curl -X GET http://localhost:8080/transacoes/PegarTodas/1
-```
-
-#### Atualizar Transação
-```bash
-curl -X PUT http://localhost:8080/transacoes/Atualizar/1 \
-  -H "Content-Type: application/json" \
-  -d '{
-    "descricao": "Venda Freelance - Projeto Completo",
-    "valor": 3000.00,
-    "data": "2026-03-04",
-    "tipo": "RECEITA"
-  }'
-```
-
-#### Deletar Transação
-```bash
-curl -X DELETE http://localhost:8080/transacoes/Deletar/1
-```
-
-### Usando Postman/Insomnia
-
-1. **Importe a Collection** (se disponível)
-2. Configure o **Base URL**: `http://localhost:8080`
-3. Para POST/PUT, adicione **Header**: `Content-Type: application/json`
-4. Cole o **JSON** no Body (raw)
 
 ---
 
@@ -870,27 +730,6 @@ curl -X DELETE http://localhost:8080/transacoes/Deletar/1
 }
 ```
 
-### Estratégias de Tratamento
-
-```java
-// No Controller
-try {
-    // Operação
-    return ResponseEntity.ok(resultado);
-} catch (Exception e) {
-    System.err.println("Erro: " + e.getMessage());
-    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-}
-```
-
-### Logs de Erro
-
-Erros são logados no console:
-```
-Erro ao criar transação: java.sql.SQLException: Connection refused
-Erro ao atualizar transação: Transação com ID 999 não encontrada
-```
-
 ---
 
 ## ✨ Boas Práticas Implementadas
@@ -902,7 +741,6 @@ Erro ao atualizar transação: Transação com ID 999 não encontrada
 
 ### 2. **Injeção de Dependência**
 ```java
-// Via construtor (recomendado)
 public ControllerTransacao(ServiceTransacao serviceTransacao) {
     this.serviceTransacao = serviceTransacao;
 }
@@ -910,92 +748,8 @@ public ControllerTransacao(ServiceTransacao serviceTransacao) {
 
 ### 3. **ResponseEntity**
 ```java
-// Retorno consistente com status HTTP apropriado
 return ResponseEntity.status(HttpStatus.CREATED).body(nova);
 ```
-
-### 4. **Tratamento de Exceções**
-```java
-try {
-    // operação
-} catch (Exception e) {
-    // log e resposta apropriada
-}
-```
-
-### 5. **PathVariable e RequestParam**
-```java
-@GetMapping("/PegarTodas/{id}")
-public ResponseEntity<List<ModelTransacao>> PegarTodasTransacoes(@PathVariable int id)
-
-@GetMapping("/Pegar")
-public ResponseEntity<List<ModelTransacao>> PegarDados(@RequestParam int id, @RequestParam String param)
-```
-
-### 6. **Comentários e Documentação**
-```java
-/**
- * JavaDoc completo explicando:
- * - Propósito do método
- * - Parâmetros
- * - Retorno
- * - Status HTTP
- */
-```
-
----
-
-## 🚀 Melhorias Futuras
-
-### Banco de Dados
-- [ ] Adicionar auditoria (created_by, updated_by)
-- [ ] Implementar soft delete (deleted_at)
-- [ ] Criar tabela separada para USUARIOS
-- [ ] Criar tabela de CATEGORIAS
-- [ ] Normalizar relacionamentos (1:N, N:N)
-
-### Segurança
-- [ ] Implementar **Spring Security**
-- [ ] Adicionar **autenticação JWT**
-- [ ] Criptografar senhas com **BCrypt**
-- [ ] Validar permissões de usuário
-- [ ] Implementar rate limiting
-
-### Validação
-- [ ] Adicionar **@Valid** nos Controllers
-- [ ] Implementar **Bean Validation** (javax.validation)
-- [ ] Validar formato de email, valores mínimos, etc.
-- [ ] Validar constraints de banco
-
-### Funcionalidades
-- [ ] Busca de transações por data
-- [ ] Filtros por tipo (RECEITA/DESPESA)
-- [ ] Relatórios financeiros (saldo, totais)
-- [ ] Paginação de resultados
-- [ ] Ordenação customizada
-- [ ] Export para CSV/Excel/PDF
-
-### Qualidade de Código
-- [ ] Criar **testes unitários** (JUnit 5)
-- [ ] Criar **testes de integração** (MockMvc)
-- [ ] Adicionar **Swagger/OpenAPI** para documentação automática
-- [ ] Implementar **logs estruturados** (SLF4J)
-- [ ] Adicionar **métricas** (Actuator)
-- [ ] Code coverage > 80%
-
-### Performance
-- [ ] Implementar **cache** (Redis/Caffeine)
-- [ ] Otimizar queries do banco
-- [ ] Adicionar **índices compostos**
-- [ ] Connection pooling otimizado
-- [ ] Compressão de responses
-
-### DevOps
-- [ ] Criar **Docker** image
-- [ ] Configurar **CI/CD** (GitHub Actions)
-- [ ] Adicionar **health checks**
-- [ ] Monitoramento com **Prometheus/Grafana**
-- [ ] Deploy automatizado
 
 ---
 
@@ -1006,92 +760,17 @@ public ResponseEntity<List<ModelTransacao>> PegarDados(@RequestParam int id, @Re
 1. **Segurança**
    - ❌ Não há autenticação implementada
    - ❌ Senhas não são criptografadas
-   - ❌ Sem proteção CSRF
    - ⚠️ **Não usar em produção sem implementar segurança!**
 
 2. **Validação**
    - ❌ Falta validação de dados de entrada
    - ❌ Sem verificação de formato de email
-   - ❌ Sem validação de valores negativos
-
-3. **Funcionalidades**
-   - ⚠️ `/Pegar` ignora os parâmetros fornecidos
-   - ⚠️ `/PegarTodas/{id}` não utiliza o ID
-   - ⚠️ Falta paginação para grandes volumes de dados
-
-4. **Testes**
-   - ❌ Sem testes unitários
-   - ❌ Sem testes de integração
-   - ⚠️ Testes manuais necessários
-
-5. **Banco de Dados**
-   - ⚠️ Falta normalização completa
-   - ⚠️ Senhas armazenadas em texto plano
-   - ⚠️ Sem auditoria de mudanças
-
-### ✅ Recomendações
-
-- 📝 Adicionar validações (@Valid, @NotNull, @Email, etc)
-- 🔒 Implementar Spring Security antes de produção
-- 📊 Adicionar logging adequado
-- 🧪 Criar suite de testes
-- 📖 Documentar com Swagger/OpenAPI
-- 🐳 Containerizar com Docker
-- 🗄️ Normalizar banco de dados
-- 🔐 Criptografar dados sensíveis
-
----
-
-## 📞 Suporte
-
-### Contato
-
-Para dúvidas, sugestões ou reportar problemas:
-
-- **Autor:** Jhefferson
-- **Email:** [seu-email@exemplo.com]
-- **GitHub:** [github.com/seu-usuario]
-- **Issues:** [Link para Issues do Projeto]
-
-### Como Reportar Bugs
-
-1. Verifique se o bug já foi reportado
-2. Crie uma nova Issue com:
-   - Título descritivo
-   - Passos para reproduzir
-   - Comportamento esperado vs atual
-   - Logs de erro (se houver)
-   - Ambiente (SO, Java version, etc)
 
 ---
 
 ## 📄 Licença
 
 Este projeto está sob a licença **MIT**.
-
-```
-MIT License
-
-Copyright (c) 2026 Jhefferson
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
 
 ---
 
@@ -1104,96 +783,12 @@ SOFTWARE.
 | **GitHub Copilot (IA)** | **75%** | Estruturação, correções, documentação técnica |
 | **Jhefferson (Humano)** | **25%** | Arquitetura, decisões de negócio, validação |
 
-### Detalhamento das Contribuições
-
-#### 🤖 IA (GitHub Copilot) - 75%
-
-**Desenvolvimento:**
-- ✅ Estrutura inicial do projeto Spring Boot
-- ✅ Implementação dos Controllers REST
-- ✅ Correção de erros de sintaxe e imports
-- ✅ Padrões e boas práticas Spring
-- ✅ Implementação de ResponseEntity
-- ✅ Tratamento básico de exceções
-- ✅ JavaDoc e comentários explicativos
-
-**Documentação:**
-- ✅ README.md completo
-- ✅ Documentação de endpoints
-- ✅ Exemplos de uso (cURL)
-- ✅ Diagramas de arquitetura
-- ✅ Guia de instalação
-- ✅ DER e modelagem de dados
-
-#### 👨‍💻 Humano (Jhefferson) - 25%
-
-**Arquitetura e Design:**
-- ✅ Definição da arquitetura do sistema
-- ✅ Escolha das tecnologias
-- ✅ Modelagem do banco de dados
-- ✅ Regras de negócio das transações
-
-**Validação e Testes:**
-- ✅ Testes manuais dos endpoints
-- ✅ Validação de funcionalidades
-- ✅ Ajustes e refinamentos
-- ✅ Decisões sobre melhorias futuras
-
-**Gestão:**
-- ✅ Planejamento do projeto
-- ✅ Definição de requisitos
-- ✅ Revisão final do código
-
----
-
-## 📚 Recursos Adicionais
-
-### Documentação Oficial
-
-- [Spring Boot Documentation](https://spring.io/projects/spring-boot)
-- [Spring Data JPA](https://spring.io/projects/spring-data-jpa)
-- [Spring Web MVC](https://docs.spring.io/spring-framework/docs/current/reference/html/web.html)
-- [Maven Documentation](https://maven.apache.org/guides/)
-- [MySQL Documentation](https://dev.mysql.com/doc/)
-- [H2 Database](https://www.h2database.com/html/main.html)
-
-### Tutoriais Recomendados
-
-- [Baeldung - Spring Boot](https://www.baeldung.com/spring-boot)
-- [Spring.io Guides](https://spring.io/guides)
-- [REST API Best Practices](https://stackoverflow.blog/2020/03/02/best-practices-for-rest-api-design/)
-- [Database Design](https://www.guru99.com/database-design.html)
-
----
-
-## 📈 Changelog
-
-### [1.0.0] - 2026-03-04
-
-#### Adicionado
-- ✅ CRUD completo de transações
-- ✅ Estrutura MVC/REST
-- ✅ Persistência com JPA
-- ✅ Documentação completa
-- ✅ Tratamento básico de erros
-- ✅ DER e modelagem de dados
-- ✅ Scripts SQL de criação
-- ✅ Índices de performance
-
-#### Pendente
-- ⏳ Autenticação e autorização
-- ⏳ Validação de dados
-- ⏳ Testes automatizados
-- ⏳ Swagger/OpenAPI
-- ⏳ Docker
-- ⏳ Normalização do banco
-
 ---
 
 **Última atualização:** 04/03/2026  
-**Versão da Documentação:** 2.1  
-**Status:** ✅ Documentação Completa com DER
+**Versão da Documentação:** 2.2  
+**Status:** ✅ Documentação Completa com Roadmap Detalhado
 
 ---
 
-> 💡 **Dica:** Mantenha esta documentação e o DER atualizados conforme o projeto evolui!
+> 💡 **Dica:** Acompanhe o progresso do projeto pelo Roadmap e atualize os status conforme avança!
