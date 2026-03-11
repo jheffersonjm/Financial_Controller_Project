@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import br.com.jhefferson.BackEnd.Interface.InterfaceConta;
@@ -100,7 +101,7 @@ public class ServiceContas implements InterfaceConta {
     public List<ModelConta> obterTodosRegistros() {
     try {
         // Ele vai Pegar os dados dentro do banco de dados usando o comando .findAll() e que ele vai retorna uma lista com os dados.
-        return repositoryConta.findAll();
+        return repositoryConta.findAll(PageRequest.of(0, 10)).getContent(); // Ele vai pegar os dados dentro do banco de dados usando o comando .findAll() e que ele vai retorna uma lista com os dados.
    } catch (Exception e) {
         System.err.println("Erro ao obter todos os registros: " + e.getMessage());
         return null;

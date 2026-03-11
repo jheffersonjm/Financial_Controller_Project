@@ -5,8 +5,8 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 02022006
-      POSTGRES_DB: financial_controller
+      POSTGRES_DB: PCF
     ports:
-      - "5432:5432"
+      - "3000:3000"
     volumes:
       - ./data:/var/lib/postgresql/data
