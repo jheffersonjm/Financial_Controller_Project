@@ -3,7 +3,6 @@ package br.com.jhefferson.BackEnd.Interface;
 
 
 import br.com.jhefferson.BackEnd.model.ModelUsuario;
-import ch.qos.logback.core.model.Model;
 
 public interface InterfaceUsuarios {
 

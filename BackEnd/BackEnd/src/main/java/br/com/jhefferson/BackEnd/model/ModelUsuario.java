@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 
 @Entity
  @Table(name= "Usuario")
@@ -17,6 +18,10 @@ public class ModelUsuario {
 // E para definir o tipo de dado como Long temos que usar o comando Long e depois o nome da variavel.
 @Column(name = "id_usuario")
 private Long idUsuario;
+
+@Version
+@Column(name = "version")
+private Long version;
 
 // O comando @Column e que ele pode ser usado para definir uma nova coluna dentro do Banco de dados. 
     // Para que ele possa efinir um nome da coluna temos que o comando name e dai ele vai receber uma String com o nome. 
@@ -47,6 +52,14 @@ public Long getIdUsuario() {
 
 public void setIdUsuario(Long idUsuario) {
     this.idUsuario = idUsuario;
+}
+
+public Long getVersion() {
+    return version;
+}
+
+public void setVersion(Long version) {
+    this.version = version;
 }
 
 public String getNomeUsuario() {

@@ -1,15 +1,15 @@
 package br.com.jhefferson.BackEnd.model;
 
-import java.time.LocalTime;
+import java.sql.Time;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 
 // Para que ele possa cria um nova entidade dentro do banco de dados e para isso que ele tem a anotação @Entity.
 @Entity
@@ -23,6 +23,10 @@ public class ModelTransacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idTransacao;
 
+    @Version
+    @Column(name = "version")
+    private Long version;
+
     // O comando @Column e que ele pode ser usado para definir uma nova coluna dentro do Banco de dados. 
     // Para que ele possa efinir um nome da coluna temos que o comando name e dai ele vai receber uma String com o nome. 
     // para que ele não possa ser nulla temos que usar o comando nullable = false.
@@ -31,17 +35,9 @@ public class ModelTransacao {
     private String descricaoTransacao;
 
     @Column(name = "data_transacao", nullable = false)
-    private LocalTime dataTransacao = LocalTime.now();
+    private String dataTransacao;
 
-    
-    // Para que ele possa criar uma relação entre duas tabelas temos que usar o comando @ManyToOne. 
-    /* 
-    O comando @JoinColumn é usado para indicar qual variável vai armazenar a (FK) chave estrangeira, usamos a tag name para indicar o nome da coluna e 
-    nullable para indicar se ela pode ser nula ou não.
-    */
-    @ManyToOne
-    @JoinColumn(name = "id_conta", nullable = false)
-    private ModelConta idConta;
+     // O comando @Column e que ele pode ser usado para definir uma nova coluna dentro do Banco de dados.
 
     @Column(name = "tipo_transacao", nullable = false, length = 255)
     private String tipoTransacao;
@@ -56,6 +52,14 @@ public class ModelTransacao {
         this.idTransacao = idTransacao;
     }
 
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
     public String getDescricaoTransacao() {
         return descricaoTransacao;
     }
@@ -64,21 +68,6 @@ public class ModelTransacao {
         this.descricaoTransacao = descricaoTransacao;
     }
 
-    public LocalTime getDataTransacao() {
-        return dataTransacao;
-    }
-
-    public void setDataTransacao(LocalTime dataTransacao) {
-        this.dataTransacao = dataTransacao;
-    }
-
-    public ModelConta getIdConta() {
-        return idConta;
-    }
-
-    public void setIdConta(ModelConta idConta) {
-        this.idConta = idConta;
-    }
 
     public String getTipoTransacao() {
         return tipoTransacao;
@@ -87,4 +76,14 @@ public class ModelTransacao {
     public void setTipoTransacao(String tipoTransacao) {
         this.tipoTransacao = tipoTransacao;
     }   
+
+    public String getDataTransacao() {
+        return dataTransacao != null ? dataTransacao : LocalDateTime.now().toString();
+    }
+
+    public void setDataTransacao(String dataTransacao) {
+        this.dataTransacao = dataTransacao != null ? dataTransacao : LocalDateTime.now().toString();
+    }
+
+    
 }

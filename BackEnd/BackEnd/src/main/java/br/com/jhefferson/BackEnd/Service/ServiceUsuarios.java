@@ -1,7 +1,11 @@
 package br.com.jhefferson.BackEnd.Service;
 
 import java.util.Optional;
+
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import br.com.jhefferson.BackEnd.Interface.InterfaceUsuarios;
 import br.com.jhefferson.BackEnd.Repository.RepositoryUsuario;
@@ -18,17 +22,25 @@ public class ServiceUsuarios implements InterfaceUsuarios{
 
     @Override
     public ModelUsuario criarUsuario(ModelUsuario usuario) {
-        String nome = usuario.getNomeUsuario();
         String email = usuario.getEmailUsuario();
-        String senha = PegarSenha(usuario.getSenhaUsuario());
+        if (email == null || email.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "E-mail é obrigatório.");
+        }
+
+        Optional<ModelUsuario> usuarioExistente = repositoryUsuario.findByEmailUsuario(email);
+        if (usuarioExistente.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "E-mail já cadastrado.");
+        }
 
         try {
-       return repositoryUsuario.save(usuario);
+            usuario.setIdUsuario(null);
+            usuario.setSenhaUsuario(PegarSenha(usuario.getSenhaUsuario()));
+            return repositoryUsuario.save(usuario);
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "E-mail já cadastrado.");
         } catch (Exception e) {
-            System.err.println("Erro ao criar usuário: " + e.getMessage());
-            return null;
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao criar usuário.");
         }
-        
     }
 
     @Override

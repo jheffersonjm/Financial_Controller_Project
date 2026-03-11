@@ -11,13 +11,14 @@ public interface InterfaceTransacao {
     // E para ele criar uma nova transacao temso que passar o objeto ModelTransacao.
      ModelTransacao criarTransacao(ModelTransacao transacao);
 
-     // Para atualizar uma transacao, temso que passar o objeto ModelTransacao.     
-    ModelTransacao atualizarTransacao(ModelTransacao transacao);
+    
     // Para deletar uma transacao, temso que passar o id da transacao.
     void deletarTransacao(Long idTransacao);
     // Para obter uma transacao por id, temso que passar o id da transacao.
-    ModelTransacao obterTransacaoPorId(Long idTransacao);
+    ModelTransacao obterTransacaoPorId(Long id);
     // Para obter todas as transacoes.
-    List<ModelTransacao> obterTodasTransacoes(); 
+    List<ModelTransacao> obterTodasTransacoes();
+
+    ModelTransacao atualizarTransacao(long id, ModelTransacao transacao);
 
 }

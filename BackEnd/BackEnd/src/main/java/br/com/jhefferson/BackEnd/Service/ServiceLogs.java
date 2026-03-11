@@ -2,7 +2,6 @@ package br.com.jhefferson.BackEnd.Service;
 
 import java.util.List;
 
-import org.aspectj.apache.bcel.util.Repository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +11,12 @@ import br.com.jhefferson.BackEnd.model.ModelLogs;
 
 @Service
 public class ServiceLogs implements InterfaceLogs{
-    private ReposotoryLogs repositoryLogs;
+    private final ReposotoryLogs repositoryLogs;
+
+    public ServiceLogs(ReposotoryLogs repositoryLogs) {
+        this.repositoryLogs = repositoryLogs;
+    }
+
     @Override
     public List<ModelLogs> PegarLogs() {
         try {
@@ -22,10 +26,5 @@ public class ServiceLogs implements InterfaceLogs{
         } 
 
     }
-
-    @Override
-    public List<ModelLogs> PegarLogsPorConta(int idConta) {
-       return repositoryLogs.findById(idConta).map(List::of).orElse(null); // Ele vai pegar os dados dentro do banco de dados usando o comando .findById() e que ele vai retorna uma lista com os dados.  
-    }
-    
+   
 }
