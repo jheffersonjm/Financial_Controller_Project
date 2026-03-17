@@ -33,5 +33,6 @@ build/
 .vscode/
 
 ##Projeto para senha Banco de dados##
-src/main/resources/application.properties
-src/main/resources/application.yaml
+src/main/resources/**
+src/test/resources
+
